@@ -1,0 +1,87 @@
+﻿@model QuesViewModel
+<div class="row">
+    <div class="col-md-8 offset-md-2 jumbotron">
+        <input hidden value="@Model.Question.Id" id="question-id" />
+        <h2>@Model.Question.Title</h2>
+        <hr />
+        <p>@Model.Question.Body</p>
+        <hr />
+        <span>Asked by @Model.Question.Name</span>
+        on
+        <span>@Model.Question.Date</span>
+        <br />
+        <span>Tags:</span>
+        @foreach (var qt in Model.Question.QuestionTags)
+        {
+            <span class="badge badge-primary">@qt.Tag.Name</span>
+        }
+        <br />
+        <span>Likes: </span> <span data-question-id="23" id="likes-count">@Model.NumLikes </span>
+        <br />
+        @if (Model.LoggedIn)
+        {
+            @if (!Model.LikedAlready)
+            {
+                <button id="like-question" data-question-id="@Model.Question.Id" class="btn btn-primary btn-lg">LIKE</button>
+            }
+            else
+            {
+                <button disabled id="like-question" data-question-id="@Model.Question.Id" class="btn btn-primary btn-lg">LIKE</button>
+            }
+
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h3>Answers:</h3>
+    </div>
+</div>
+@if (Model.Question.Answers == null)
+{
+    <div class="row">
+        <div class="col-md-8 offset-md-2 card card-body bg-light">
+            <h3>No answers yet, be the first to submit one!</h3>
+        </div>
+    </div>
+}
+else
+{
+    @foreach (var answer in Model.Question.Answers)
+    {
+        <div class="row">
+            <div class="col-md-8 offset-md-2 card card-body bg-light">
+                <div>@answer.AnswerText</div>
+                <br />
+                <span>Answered by @answer.user.Name</span>
+                <span>on</span>
+                <span>@answer.Date.ToLongDateString();</span>
+                <hr />
+            </div>
+        </div>
+    }
+
+}
+
+
+
+
+@if (Model.LoggedIn)
+{
+    <div class="row">
+        <div class="col-md-8 offset-md-2 card card-body bg-light mt-4">
+            <h2>Submit an answer</h2>
+            <form method="post" action="/home/addanswer">
+                <input type="hidden" name="questionid" value="@Model.Question.Id" />
+                <textarea class="form-control" placeholder="Type your answer here..." rows="10" name="answertext"></textarea>
+                <br />
+                <button class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+}
+
+
+@section Scripts{
+    <script src="~/js/ViewQuestion.js"></script>
+}

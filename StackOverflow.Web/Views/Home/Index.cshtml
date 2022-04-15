@@ -1,0 +1,56 @@
+﻿@model QuestionViewModel
+
+@foreach (var Question in Model.Questions)
+{
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card card-body bg-light">
+                <h4>
+                    <a href="/home/viewquestion?id=@Question.Id">
+                        @Question.Title
+                    </a>
+                </h4>
+                <div>
+                    <Span>Tags:</Span>
+                    @if (Question.QuestionTags.Count > 0)
+                    {
+
+                        @foreach (var qt in Question.QuestionTags)
+                        {
+                            <span class="badge badge-primary">@qt.Tag.Name</span>
+                        }
+                    }
+
+
+                <div style="margin-top: 10px;">
+@Question.Body                </div>
+                    @if (Question.Likes == null)
+                    {
+                        <span>Likes: 0 </span>
+                    }
+                    else
+                    {
+                        <span>Likes: @Question.Likes.Count </span>
+                    }
+
+                    <br />
+                    @if (Question.Answers == null)
+                    {
+                        <span>1 answer(s)</span>
+                    }
+                    else
+                    {
+                        <span>@Question.Answers.Count answer(s)</span>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section styles
+    {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" />
+}
+
+
